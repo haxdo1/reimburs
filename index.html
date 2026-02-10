@@ -1,165 +1,246 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SAN Reimbursement Form Generator</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <title>SAN Reimbursement | Form Generator</title>
+    <link rel="icon" type="image/png" href="https://i.imgur.com/s4itB88.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            800: '#0d1117',
+                            900: '#030508',
+                        },
+                        accent: {
+                            blue: '#3b82f6',
+                            purple: '#8b5cf6',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        outfit: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
 </head>
 
-<body>
+<body class="bg-dark-900 text-slate-200 font-sans min-h-screen">
     <div class="bg-blobs">
         <div class="blob blob-1"></div>
         <div class="blob blob-2"></div>
     </div>
 
-    <section class="section">
-        <div class="container is-max-desktop">
-            <header class="has-text-centered mb-6 is-relative">
-                <div class="settings-trigger">
-                    <button type="button" id="openSettingsBtn" class="button is-dark is-ghost">
-                        <span class="icon is-medium"><i class="fas fa-cog fa-lg"></i></span>
-                    </button>
-                </div>
-                <h1 class="title is-1">Reimbursement</h1>
-                <p class="subtitle mt-2">Digital Generation System</p>
-                <div class="accent-line"></div>
-            </header>
-
-            <!-- Settings Modal -->
-            <div class="modal" id="settingsModal">
-                <div class="modal-background"></div>
-                <div class="modal-card">
-                    <header class="modal-card-head">
-                        <p class="modal-card-title">Portal Settings</p>
-                        <button type="button" class="delete" aria-label="close" id="closeSettingsBtn"></button>
-                    </header>
-                    <section class="modal-card-body">
-                        <div class="notification is-info is-light">
-                            <p class="is-size-7"><strong>Tip:</strong> If uploads fail with 403 on InfinityFree, your
-                                Client-ID might be domain-restricted. Try a fresh one.</p>
-                        </div>
-                        <div class="field">
-                            <label class="label">Imgur Client-ID</label>
-                            <div class="control has-icons-left">
-                                <input class="input" type="text" id="clientIdInput" placeholder="Enter your Client-ID">
-                                <span class="icon is-small is-left"><i class="fas fa-key"></i></span>
-                            </div>
-                        </div>
-                    </section>
-                    <footer class="modal-card-foot">
-                        <button type="button" class="button is-info is-fullwidth" id="saveSettingsBtn">Save
-                            Settings</button>
-                    </footer>
-                </div>
+    <main class="container mx-auto max-w-4xl px-4 py-12 md:py-20">
+        <!-- Header -->
+        <header class="relative text-center mb-16 animate-slide-up">
+            <div class="absolute -top-4 right-0">
+                <button type="button" id="openSettingsBtn"
+                    class="p-2 text-slate-400 hover:text-white transition-colors">
+                    <i data-lucide="settings" class="w-6 h-6"></i>
+                </button>
             </div>
 
-            <form id="reimbursementForm">
-                <div class="card mb-6">
-                    <header class="card-header">
-                        <p class="card-header-title">
-                            <span class="icon-text">
-                                <span>General Information</span>
-                            </span>
+            <div class="flex flex-col items-center gap-6">
+                <img src="https://i.imgur.com/s4itB88.png" alt="SAN Logo"
+                    class="w-32 md:w-40 drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]">
+                <h1 class="font-outfit text-4xl md:text-5xl font-bold tracking-tight">
+                    <span
+                        class="bg-gradient-to-r from-white via-white to-accent-blue bg-clip-text text-transparent uppercase">Reimbursement
+                        Generator</span>
+                </h1>
+                <div class="w-20 h-1 bg-gradient-to-r from-accent-blue to-accent-purple rounded-full"></div>
+            </div>
+        </header>
+
+        <!-- Settings Modal -->
+        <div id="settingsModal"
+            class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm hidden">
+            <div class="glass w-full max-w-md rounded-2xl overflow-hidden animate-slide-up">
+                <div class="p-6 border-b border-white/10 flex justify-between items-center">
+                    <h3 class="text-xl font-semibold font-outfit">Portal Settings</h3>
+                    <button type="button" id="closeSettingsBtn"
+                        class="text-slate-400 hover:text-white transition-colors">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="bg-blue-500/10 border border-blue-500/20 p-4 rounded-xl">
+                        <p class="text-xs text-blue-300 flex items-start gap-3">
+                            <i data-lucide="info" class="w-4 h-4 shrink-0 mt-0.5"></i>
+                            <span>If uploads fail with 403 on InfinityFree, your Client-ID might be
+                                domain-restricted.</span>
                         </p>
-                    </header>
-                    <div class="card-content">
-                        <div class="columns is-variable is-5">
-                            <div class="column">
-                                <div class="field">
-                                    <label class="label">Full Name</label>
-                                    <div class="control">
-                                        <input class="input" type="text" id="name" placeholder="Michael Saylor"
-                                            required>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="column">
-                                <div class="field">
-                                    <label class="label">Work Position</label>
-                                    <div class="control">
-                                        <input class="input" type="text" id="position" placeholder="Manager" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="column is-4">
-                                <div class="field">
-                                    <label class="label">Period (Auto-Detected)</label>
-                                    <div class="control">
-                                        <input class="input" type="text" id="period" readonly
-                                            placeholder="Detecting...">
-                                    </div>
-                                </div>
-                            </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Imgur
+                            Client-ID</label>
+                        <div class="relative">
+                            <i data-lucide="key"
+                                class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500"></i>
+                            <input
+                                class="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-white focus:outline-none focus:border-accent-blue transition-colors"
+                                type="text" id="clientIdInput" placeholder="Enter your Client-ID">
                         </div>
                     </div>
                 </div>
-
-                <div class="card mb-6">
-                    <header class="card-header">
-                        <p class="card-header-title">Reimbursable Activities</p>
-                    </header>
-                    <div class="card-content">
-                        <div id="activitiesList">
-                            <!-- Activity items will be injected here -->
-                        </div>
-                        <button type="button" id="addActivityBtn" class="button is-info is-light is-fullwidth mt-4">
-                            <strong>Add Activity Protocol</strong>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="field is-grouped is-grouped-centered mt-6">
-                    <div class="control">
-                        <button type="submit" class="button is-success is-large is-rounded px-6">
-                            <span>Initialize Generation</span>
-                        </button>
-                    </div>
-                </div>
-            </form>
-
-            <div id="resultCard" class="card mt-6 mb-6" style="display: none;">
-                <header class="card-header">
-                    <p class="card-header-title">Output: BBCode Protocol</p>
-                </header>
-                <div class="card-content">
-                    <div class="field">
-                        <label class="label">Generated Subject</label>
-                        <div class="field has-addons">
-                            <div class="control is-expanded">
-                                <input class="input" type="text" id="subjectOutput" readonly>
-                            </div>
-                            <div class="control">
-                                <button id="copySubjectBtn" class="button is-info">
-                                    <strong>Copy Subject</strong>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <label class="label mt-5">Generated BBCode</label>
-                    <pre id="bbcodeOutput" class="content-code mb-4"></pre>
-                    <div class="buttons">
-                        <button id="copyBtn" class="button is-info is-medium is-flex-grow-1 is-rounded">
-                            <strong>Transmit to Clipboard</strong>
-                        </button>
-                        <a id="forumPostLink" href="https://news.san-andreas.net/posting.php?mode=post&f=767"
-                            target="_blank" class="button is-success is-medium is-flex-grow-1 is-rounded">
-                            <strong>Post to Forum</strong>
-                        </a>
-                    </div>
+                <div class="p-6 pt-0">
+                    <button type="button" id="saveSettingsBtn"
+                        class="w-full bg-accent-blue hover:bg-blue-600 text-white font-semibold py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]">
+                        Save Settings
+                    </button>
                 </div>
             </div>
         </div>
-    </section>
+
+        <form id="reimbursementForm" class="space-y-10">
+            <!-- General Info Section -->
+            <section class="glass rounded-3xl p-8 md:p-10 animate-slide-up shadow-2xl">
+                <div class="flex items-center gap-3 mb-8">
+                    <div class="w-10 h-10 rounded-xl bg-accent-blue/20 flex items-center justify-center">
+                        <i data-lucide="user" class="w-5 h-5 text-accent-blue"></i>
+                    </div>
+                    <h2 class="text-xl font-semibold font-outfit">General Information</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                    <div class="md:col-span-12 lg:col-span-5 space-y-2">
+                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Full Name</label>
+                        <input
+                            class="w-full bg-white/5 border border-white/10 rounded-xl py-4 px-5 text-white focus:outline-none focus:border-accent-blue transition-colors"
+                            type="text" id="name" placeholder="Michael Saylor" required>
+                    </div>
+                    <div class="md:col-span-7 lg:col-span-4 space-y-2">
+                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Position</label>
+                        <input
+                            class="w-full bg-white/5 border border-white/10 rounded-xl py-4 px-5 text-white focus:outline-none focus:border-accent-blue transition-colors"
+                            type="text" id="position" placeholder="Manager" required>
+                    </div>
+                    <div class="md:col-span-5 lg:col-span-3 space-y-2">
+                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Period</label>
+                        <input
+                            class="w-full bg-white/5 border border-white/10 rounded-xl py-4 px-5 text-slate-400 bg-white/2 cursor-not-allowed italic"
+                            type="text" id="period" readonly placeholder="Detecting...">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activities Section -->
+            <section class="glass rounded-3xl p-8 md:p-10 animate-slide-up shadow-2xl [animation-delay:150ms]">
+                <div class="flex items-center justify-between mb-8">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-accent-purple/20 flex items-center justify-center">
+                            <i data-lucide="list-checks" class="w-5 h-5 text-accent-purple"></i>
+                        </div>
+                        <h2 class="text-xl font-semibold font-outfit">Activities</h2>
+                    </div>
+                </div>
+
+                <div id="activitiesList" class="space-y-6">
+                    <!-- Dynamic Items -->
+                </div>
+
+                <button type="button" id="addActivityBtn"
+                    class="group w-full mt-6 py-4 rounded-2xl border-2 border-dashed border-white/10 hover:border-accent-blue/50 hover:bg-accent-blue/5 transition-all text-slate-400 hover:text-accent-blue flex items-center justify-center gap-2">
+                    <i data-lucide="plus-circle" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                    <span class="font-semibold uppercase tracking-wider text-sm">Add Activity</span>
+                </button>
+            </section>
+
+            <!-- Submit -->
+            <div class="text-center pt-4 animate-slide-up [animation-delay:300ms]">
+                <button type="submit"
+                    class="inline-flex items-center gap-3 px-12 py-5 bg-accent-blue hover:bg-blue-600 text-white font-bold text-lg rounded-2xl transition-all shadow-xl shadow-blue-500/20 hover:scale-[1.02] active:scale-[0.98]">
+                    <span>Generate BBCode</span>
+                    <i data-lucide="zap" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </form>
+
+        <!-- Result Card -->
+        <div id="resultCard" class="mt-20 space-y-10 animate-slide-up hidden">
+            <section class="glass rounded-3xl p-8 md:p-10 shadow-2xl border-accent-blue/20">
+                <div class="flex items-center gap-3 mb-8">
+                    <div class="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center">
+                        <i data-lucide="file-text" class="w-5 h-5 text-green-500"></i>
+                    </div>
+                    <h2 class="text-xl font-semibold font-outfit text-white">Generated BBCode</h2>
+                </div>
+
+                <div class="space-y-8">
+                    <!-- Subject -->
+                    <div class="space-y-3">
+                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Generated
+                            Subject</label>
+                        <div class="flex gap-2">
+                            <input
+                                class="flex-grow bg-white/5 border border-white/10 rounded-xl py-4 px-5 text-white focus:outline-none focus:border-accent-blue transition-colors"
+                                type="text" id="subjectOutput" readonly>
+                            <button id="copySubjectBtn"
+                                class="px-6 bg-accent-blue/10 hover:bg-accent-blue text-accent-blue hover:text-white border border-accent-blue/30 rounded-xl font-semibold transition-all">
+                                Copy
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- BBCode -->
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Generated
+                                BBCode</label>
+                        </div>
+                        <div class="relative group">
+                            <pre id="bbcodeOutput"
+                                class="w-full bg-black/40 border border-white/10 rounded-2xl p-6 text-accent-blue font-mono text-sm overflow-x-auto min-h-[300px] whitespace-pre-wrap"></pre>
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none rounded-2xl">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                        <button id="copyBtn"
+                            class="flex-grow py-5 bg-white/10 hover:bg-white/20 text-white font-bold rounded-2xl transition-all flex items-center justify-center gap-3">
+                            <i data-lucide="copy" class="w-5 h-5"></i>
+                            Copy BBCode
+                        </button>
+                        <a id="forumPostLink" href="https://news.san-andreas.net/posting.php?mode=post&f=767"
+                            target="_blank"
+                            class="flex-grow py-5 bg-green-600 hover:bg-green-700 text-white font-bold rounded-2xl transition-all flex items-center justify-center gap-3 shadow-lg shadow-green-500/20">
+                            <i data-lucide="external-link" class="w-5 h-5"></i>
+                            Post to Forum
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="container mx-auto max-w-4xl px-4 py-12 text-center text-slate-500 text-sm">
+        <p>© 2026 Financial Regulator Division. All rights reserved.</p>
+    </footer>
 
     <script src="app.js"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
 </body>
 
 </html>
