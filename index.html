@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAN Reimbursement Form Generator</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="bg-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <section class="section">
+        <div class="container is-max-desktop">
+            <header class="has-text-centered mb-6 is-relative">
+                <div class="settings-trigger">
+                    <button type="button" id="openSettingsBtn" class="button is-dark is-ghost">
+                        <span class="icon is-medium"><i class="fas fa-cog fa-lg"></i></span>
+                    </button>
+                </div>
+                <h1 class="title is-1">Reimbursement</h1>
+                <p class="subtitle mt-2">Digital Generation System</p>
+                <div class="accent-line"></div>
+            </header>
+
+            <!-- Settings Modal -->
+            <div class="modal" id="settingsModal">
+                <div class="modal-background"></div>
+                <div class="modal-card">
+                    <header class="modal-card-head">
+                        <p class="modal-card-title">Portal Settings</p>
+                        <button type="button" class="delete" aria-label="close" id="closeSettingsBtn"></button>
+                    </header>
+                    <section class="modal-card-body">
+                        <div class="notification is-info is-light">
+                            <p class="is-size-7"><strong>Tip:</strong> If uploads fail with 403 on InfinityFree, your
+                                Client-ID might be domain-restricted. Try a fresh one.</p>
+                        </div>
+                        <div class="field">
+                            <label class="label">Imgur Client-ID</label>
+                            <div class="control has-icons-left">
+                                <input class="input" type="text" id="clientIdInput" placeholder="Enter your Client-ID">
+                                <span class="icon is-small is-left"><i class="fas fa-key"></i></span>
+                            </div>
+                        </div>
+                    </section>
+                    <footer class="modal-card-foot">
+                        <button type="button" class="button is-info is-fullwidth" id="saveSettingsBtn">Save
+                            Settings</button>
+                    </footer>
+                </div>
+            </div>
+
+            <form id="reimbursementForm">
+                <div class="card mb-6">
+                    <header class="card-header">
+                        <p class="card-header-title">
+                            <span class="icon-text">
+                                <span>General Information</span>
+                            </span>
+                        </p>
+                    </header>
+                    <div class="card-content">
+                        <div class="columns is-variable is-5">
+                            <div class="column">
+                                <div class="field">
+                                    <label class="label">Full Name</label>
+                                    <div class="control">
+                                        <input class="input" type="text" id="name" placeholder="Michael Saylor"
+                                            required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="field">
+                                    <label class="label">Work Position</label>
+                                    <div class="control">
+                                        <input class="input" type="text" id="position" placeholder="Manager" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-4">
+                                <div class="field">
+                                    <label class="label">Period (Auto-Detected)</label>
+                                    <div class="control">
+                                        <input class="input" type="text" id="period" readonly
+                                            placeholder="Detecting...">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-6">
+                    <header class="card-header">
+                        <p class="card-header-title">Reimbursable Activities</p>
+                    </header>
+                    <div class="card-content">
+                        <div id="activitiesList">
+                            <!-- Activity items will be injected here -->
+                        </div>
+                        <button type="button" id="addActivityBtn" class="button is-info is-light is-fullwidth mt-4">
+                            <strong>Add Activity Protocol</strong>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="field is-grouped is-grouped-centered mt-6">
+                    <div class="control">
+                        <button type="submit" class="button is-success is-large is-rounded px-6">
+                            <span>Initialize Generation</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <div id="resultCard" class="card mt-6 mb-6" style="display: none;">
+                <header class="card-header">
+                    <p class="card-header-title">Output: BBCode Protocol</p>
+                </header>
+                <div class="card-content">
+                    <div class="field">
+                        <label class="label">Generated Subject</label>
+                        <div class="field has-addons">
+                            <div class="control is-expanded">
+                                <input class="input" type="text" id="subjectOutput" readonly>
+                            </div>
+                            <div class="control">
+                                <button id="copySubjectBtn" class="button is-info">
+                                    <strong>Copy Subject</strong>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <label class="label mt-5">Generated BBCode</label>
+                    <pre id="bbcodeOutput" class="content-code mb-4"></pre>
+                    <div class="buttons">
+                        <button id="copyBtn" class="button is-info is-medium is-flex-grow-1 is-rounded">
+                            <strong>Transmit to Clipboard</strong>
+                        </button>
+                        <a id="forumPostLink" href="https://news.san-andreas.net/posting.php?mode=post&f=767"
+                            target="_blank" class="button is-success is-medium is-flex-grow-1 is-rounded">
+                            <strong>Post to Forum</strong>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
