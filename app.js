@@ -9,49 +9,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const copySubjectBtn = document.getElementById('copySubjectBtn');
     const forumPostLink = document.getElementById('forumPostLink');
     const periodInput = document.getElementById('period');
-
-    // Settings elements
-    const settingsModal = document.getElementById('settingsModal');
-    const openSettingsBtn = document.getElementById('openSettingsBtn');
-    const closeSettingsBtn = document.getElementById('closeSettingsBtn');
-    const saveSettingsBtn = document.getElementById('saveSettingsBtn');
-    const clientIdInput = document.getElementById('clientIdInput');
+    const nameInput = document.getElementById('name');
+    const positionInput = document.getElementById('position');
 
     const DEFAULT_CLIENT_ID = '7e9230a41c07e4c';
     let activityCount = 0;
 
-    // Load settings
-    clientIdInput.value = localStorage.getItem('imgur_client_id') || DEFAULT_CLIENT_ID;
 
-    // Settings Modal Logic
-    openSettingsBtn.addEventListener('click', () => {
-        settingsModal.classList.remove('hidden');
-        lucide.createIcons();
-    });
-
-    [closeSettingsBtn, settingsModal].forEach(el => {
-        el.addEventListener('click', (e) => {
-            if (e.target === el || el === closeSettingsBtn) {
-                settingsModal.classList.add('hidden');
-            }
-        });
-    });
-
-    saveSettingsBtn.addEventListener('click', () => {
-        localStorage.setItem('imgur_client_id', clientIdInput.value.trim());
-        const originalText = saveSettingsBtn.innerHTML;
-        saveSettingsBtn.innerHTML = '<span class="flex items-center justify-center gap-2"><i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Saving...</span>';
-        lucide.createIcons();
-
-        setTimeout(() => {
-            saveSettingsBtn.innerHTML = originalText;
-            settingsModal.classList.add('hidden');
-        }, 600);
-    });
 
     // Detect period automatically
     const periodContext = getPeriodContext();
     periodInput.value = periodContext;
+
+    // Load persisted user data
+    nameInput.value = localStorage.getItem('reimbursement_name') || '';
+    positionInput.value = localStorage.getItem('reimbursement_position') || '';
+
+    // Save user data on change
+    [nameInput, positionInput].forEach(input => {
+        input.addEventListener('input', () => {
+            localStorage.setItem(`reimbursement_${input.id}`, input.value.trim());
+        });
+    });
 
     // Add initial activity
     addActivity();
@@ -142,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Refund Amount</label>
                     <div class="relative">
                         <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm">$</span>
-                        <input type="text" id="refund-${activityCount}" class="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-8 pr-4 text-white focus:outline-none focus:border-accent-blue transition-colors text-sm font-mono" placeholder="100.00" required>
+                        <input type="text" id="refund-${activityCount}" class="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-8 pr-4 text-white focus:outline-none focus:border-accent-blue transition-colors text-sm font-mono activity-refund" placeholder="0.000" required>
                     </div>
                 </div>
                 <div class="space-y-2">
@@ -164,6 +143,28 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `;
         activitiesList.appendChild(div);
+
+        // Add live formatting for the new refund field
+        const refundInput = div.querySelector('.activity-refund');
+        refundInput.addEventListener('input', (e) => {
+            let value = e.target.value;
+
+            // Allow only digits and one dot
+            value = value.replace(/[^0-9.]/g, '');
+            const parts = value.split('.');
+
+            // Limit to one dot
+            if (parts.length > 2) value = parts[0] + '.' + parts.slice(1).join('');
+
+            // Format the integer part with commas
+            if (parts[0]) {
+                const integerPart = parseInt(parts[0], 10).toLocaleString('en-US');
+                e.target.value = parts.length > 1 ? integerPart + '.' + parts[1] : integerPart;
+            } else {
+                e.target.value = value;
+            }
+        });
+
         lucide.createIcons();
     }
 
@@ -193,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function formatCurrency(num) {
-        return num.toLocaleString('de-DE', {
+        return num.toLocaleString('en-US', {
             minimumFractionDigits: num % 1 === 0 ? 0 : 2,
             maximumFractionDigits: 2
         });
@@ -223,7 +224,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const base64Data = reader.result.split(',')[1];
 
             try {
-                const clientId = localStorage.getItem('imgur_client_id') || DEFAULT_CLIENT_ID;
+                const clientId = DEFAULT_CLIENT_ID;
                 const formData = new FormData();
                 formData.append('image', base64Data);
                 formData.append('type', 'base64');
@@ -252,7 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 lucide.createIcons();
 
                 if (error.message === 'IMGUR_REJECTED') {
-                    alert('Imgur rejected the request (403). Please update your Client-ID in settings.');
+                    alert('Imgur rejected the request (403). Uploads might be restricted for this domain.');
                 }
             }
         };

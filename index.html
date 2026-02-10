@@ -49,12 +49,7 @@
     <main class="container mx-auto max-w-4xl px-4 py-12 md:py-20">
         <!-- Header -->
         <header class="relative text-center mb-16 animate-slide-up">
-            <div class="absolute -top-4 right-0">
-                <button type="button" id="openSettingsBtn"
-                    class="p-2 text-slate-400 hover:text-white transition-colors">
-                    <i data-lucide="settings" class="w-6 h-6"></i>
-                </button>
-            </div>
+
 
             <div class="flex flex-col items-center gap-6">
                 <img src="https://i.imgur.com/s4itB88.png" alt="SAN Logo"
@@ -68,45 +63,7 @@
             </div>
         </header>
 
-        <!-- Settings Modal -->
-        <div id="settingsModal"
-            class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm hidden">
-            <div class="glass w-full max-w-md rounded-2xl overflow-hidden animate-slide-up">
-                <div class="p-6 border-b border-white/10 flex justify-between items-center">
-                    <h3 class="text-xl font-semibold font-outfit">Portal Settings</h3>
-                    <button type="button" id="closeSettingsBtn"
-                        class="text-slate-400 hover:text-white transition-colors">
-                        <i data-lucide="x" class="w-5 h-5"></i>
-                    </button>
-                </div>
-                <div class="p-6 space-y-4">
-                    <div class="bg-blue-500/10 border border-blue-500/20 p-4 rounded-xl">
-                        <p class="text-xs text-blue-300 flex items-start gap-3">
-                            <i data-lucide="info" class="w-4 h-4 shrink-0 mt-0.5"></i>
-                            <span>If uploads fail with 403 on InfinityFree, your Client-ID might be
-                                domain-restricted.</span>
-                        </p>
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Imgur
-                            Client-ID</label>
-                        <div class="relative">
-                            <i data-lucide="key"
-                                class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500"></i>
-                            <input
-                                class="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-white focus:outline-none focus:border-accent-blue transition-colors"
-                                type="text" id="clientIdInput" placeholder="Enter your Client-ID">
-                        </div>
-                    </div>
-                </div>
-                <div class="p-6 pt-0">
-                    <button type="button" id="saveSettingsBtn"
-                        class="w-full bg-accent-blue hover:bg-blue-600 text-white font-semibold py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]">
-                        Save Settings
-                    </button>
-                </div>
-            </div>
-        </div>
+
 
         <form id="reimbursementForm" class="space-y-10">
             <!-- General Info Section -->
