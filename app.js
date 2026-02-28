@@ -37,17 +37,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
    function getPeriodContext() {
     const now = new Date();
-    const date = now.getDate();
-    const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+
+    const monthNames = [
+        "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+        "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+    ];
     const monthName = monthNames[now.getMonth()];
 
-    let week;
-    if (date <= 7) week = "Week 1";
-    else if (date <= 14) week = "Week 2";
-    else if (date <= 21) week = "Week 3";
-    else week = "Week 4";
+    // ISO week calculation
+    const tempDate = new Date(now);
+    tempDate.setHours(0, 0, 0, 0);
 
-    return `${week} / ${monthName}`;
+    // Thursday determines the week number
+    tempDate.setDate(tempDate.getDate() + 3 - ((tempDate.getDay() + 6) % 7));
+
+    const week1 = new Date(tempDate.getFullYear(), 0, 4);
+
+    const weekNumber =
+        1 +
+        Math.round(
+            ((tempDate - week1) / 86400000 -
+                3 +
+                ((week1.getDay() + 6) % 7)) /
+                7
+        );
+
+    return `Week ${weekNumber} / ${monthName}`;
 }
 
     addActivityBtn.addEventListener('click', () => {
@@ -329,5 +344,6 @@ ${activitiesBB}
         lucide.createIcons();
     }
 });
+
 
 
