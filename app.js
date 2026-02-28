@@ -35,20 +35,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add initial activity
     addActivity();
 
-    function getPeriodContext() {
-        const now = new Date();
-        const date = now.getDate();
-        const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-        const monthName = monthNames[now.getMonth()];
+   function getPeriodContext() {
+    const now = new Date();
+    const date = now.getDate();
+    const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+    const monthName = monthNames[now.getMonth()];
 
-        let week;
-        if (date <= 7) week = "Week 1";
-        else if (date <= 14) week = "Week 2";
-        else if (date <= 21) week = "Week 3";
-        else week = "Week 4";
+    let week;
+    if (date <= 7) week = "Week 1";
+    else if (date <= 14) week = "Week 2";
+    else if (date <= 21) week = "Week 3";
+    else week = "Week 4";
 
-        return `${week} / ${monthName}`;
-    }
+    return `${week} / ${monthName}`;
+}
 
     addActivityBtn.addEventListener('click', () => {
         addActivity();
@@ -329,4 +329,5 @@ ${activitiesBB}
         lucide.createIcons();
     }
 });
+
 
